@@ -13,7 +13,7 @@ public abstract class GenericDAOImpl <Tabela, Chave>
 					implements GenericDAO<Tabela, Chave>{
 
 	@PersistenceContext
-	private EntityManager em;
+	protected EntityManager em;
 	
 	private Class<Tabela> clazz;
 	

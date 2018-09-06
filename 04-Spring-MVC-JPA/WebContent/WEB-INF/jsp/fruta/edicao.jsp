@@ -26,5 +26,6 @@
 			<form:input path="valor" cssClass="form-control"/>
 		</div>
 		<input type="submit" value="Salvar" class="btn btn-primary" />
+		<a class="btn btn-primary" href="<c:url value="/fruta/listar/" />">Cancelar</a>
 	</form:form>
 </tags:template>

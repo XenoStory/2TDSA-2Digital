@@ -62,13 +62,13 @@ public class FrutaController
 		return "redirect:/fruta/listar";
 	}
 	
-	@GetMapping("excluir/{codigo}")
+	@PostMapping("excluir/{codigo}")
 	@Transactional
-	public String processarExcluir(@PathVariable("codigo") int id, RedirectAttributes redirect)
+	public String processarExcluir(int codigo, RedirectAttributes redirect)
 	{
 		String msg = "Fruta excluída com sucesso!";
 		try {
-			dao.excluir(id);
+			dao.excluir(codigo);
 		} catch (RegistroNaoEncontradoException e) {
 			msg = "ID inválido.";
 		}
@@ -76,5 +76,12 @@ public class FrutaController
 		redirect.addFlashAttribute("msg", msg);
 		
 		return "redirect:/fruta/listar";
+	}
+	
+	@GetMapping("pesquisar")
+	public ModelAndView pesquisar(String nome)
+	{
+		return new ModelAndView("fruta/lista").addObject("lista", dao.pesquisarPorNome(nome));
+		
 	}
 }
