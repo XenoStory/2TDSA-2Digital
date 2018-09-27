@@ -1,6 +1,5 @@
 package br.com.fiap.spring.dao.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -18,12 +17,19 @@ public class PassagemDAOImpl extends GenericDAOImpl<Passagem, Integer>
 	
 	public List<Passagem> listarPorOrigimDestinoData(String origem, String destino, Calendar data) 
 	{
-		System.out.println(data.getTime());
 		return em.createQuery("from Passagem where origem like :o and destino like :d and data = :dt order by valor", Passagem.class)
 				.setParameter("o", "%" + origem + "%")
 				.setParameter("d", "%" + destino + "%")
 				.setParameter("dt", data)
 				.getResultList();
+	}
+
+	@Override
+	public void fazerCheckin(int codigo) 
+	{
+		Passagem p = buscar(codigo);
+		p.setCheckin(true);
+		atualizar(p);
 	}
 
 }

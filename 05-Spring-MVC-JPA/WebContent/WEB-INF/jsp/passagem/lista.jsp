@@ -6,6 +6,9 @@
 
 <tags:template titulo="Passagens">
 	<h1>Passagens</h1>
+	<c:if test="${not empty msg}">
+		<div class="alert alert-success">${msg}</div>
+	</c:if>
 		<c:url value="/passagem/filtrar" var="acao"/>
 	    <form class="form-inline my-2 my-lg-0" action="${acao}">
 	    	<label style="padding-right: 5px;" for="idOrigem">Origem: </label>
@@ -28,6 +31,9 @@
 			<th>Data</th>
 			<th>Bagagem</th>
 			<th>Valor</th>
+			<th>Checkin</th>
+
+			
 		</tr>
 		<c:forEach items="${lista}" var="p">
 			<tr>
@@ -36,7 +42,69 @@
 				<td><fmt:formatDate value="${p.data.time}" pattern="dd/MM/yyyy "/></td>
 				<td>${p.bagagem ? "Sim" : "Não"}</td>
 				<td>${p.valor}</td>
+				<td>${p.checkin ? "Sim" : "Não"}</td>
+				<c:if test="${!p.checkin}">
+					<td>
+						<button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1" onclick="codigoCheckin.value = ${p.codigo}">Realizar checkin</button>
+					</td>
+					<td>
+						<a class="btn btn-primary" href="<c:url value="/passagem/editar/${p.codigo}" />">Editar</a>
+					</td>
+					<td>
+						<button onclick="codigoPassagem.value = ${p.codigo}" type="submit" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+							Excluir
+						</button>
+					</td>
+				</c:if>
 			</tr>
 		</c:forEach>
 	</table>
 </tags:template>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Excluir passagem</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Desejar confirmar exclusão?
+      </div>
+      <div class="modal-footer">
+      <c:url value="/passagem/excluir/" var="modalAction" />
+        <form action="${modalAction}" method="post" method="post">
+       		<input type="hidden" name="codigo" id="codigoPassagem" />
+        	<button type="submit" class="btn btn-primary">Confirmar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Realizar checkin</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Desejar confirmar checkin?
+      </div>
+      <div class="modal-footer">
+      <c:url value="/passagem/checkin/" var="modalAction" />
+        <form action="${modalAction}" method="post" method="post">
+       		<input type="hidden" name="codigo" id="codigoCheckin" />
+        	<button type="submit" class="btn btn-primary">Confirmar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
